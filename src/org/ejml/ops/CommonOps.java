@@ -529,6 +529,7 @@ public class CommonOps {
         return true;
     }
 
+
     /**
      * <p>Performs an "in-place" transpose.</p>
      *
@@ -1222,16 +1223,19 @@ public class CommonOps {
      * @param a The left matrix in the multiplication operation. Modified.
      * @param b The right matrix in the multiplication operation. Not modified.
      */
-    public static void elementMult( D1Matrix64F a , D1Matrix64F b )
+    public static void elementMult( final D1Matrix64F a , final D1Matrix64F b )
     {
         if( a.numCols != b.numCols || a.numRows != b.numRows ) {
             throw new IllegalArgumentException("The 'a' and 'b' matrices do not have compatible dimensions");
         }
 
         int length = a.getNumElements();
+        
+        final double[] ad = a.data;
+        final double[] bd = b.data;
 
         for( int i = 0; i < length; i++ ) {
-            a.times(i , b.get(i));
+            ad[i] *= bd[i];
         }
     }
 
@@ -1244,7 +1248,7 @@ public class CommonOps {
      * @param b The right matrix in the multiplication operation. Not modified.
      * @param c Where the results of the operation are stored. Modified.
      */
-    public static void elementMult( D1Matrix64F a , D1Matrix64F b , D1Matrix64F c )
+    public static void elementMult( final D1Matrix64F a , final D1Matrix64F b , final D1Matrix64F c )
     {
         if( a.numCols != b.numCols || a.numRows != b.numRows
                 || a.numRows != c.numRows || a.numCols != c.numCols ) {
@@ -1252,9 +1256,13 @@ public class CommonOps {
         }
 
         int length = a.getNumElements();
-
+        
+        final double[] ad = a.data;
+        final double[] bd = b.data;
+        final double[] cd = c.data;
+        
         for( int i = 0; i < length; i++ ) {
-            c.set( i , a.get(i) * b.get(i) );
+            cd[i] = ad[i] * bd[i];
         }
     }
 
@@ -1312,13 +1320,13 @@ public class CommonOps {
      * @param mat An m by n matrix. Not modified.
      * @return The sum of the elements.
      */
-    public static double elementSum( D1Matrix64F mat ) {
+    public static double elementSum( final D1Matrix64F mat ) {
         double total = 0;
 
-        int size = mat.getNumElements();
-
-        for( int i = 0; i < size; i++ ) {
-            total += mat.get(i);
+        final double[] md = mat.data;
+        
+        for( int i = 0; i < mat.getNumElements(); i++ ) {
+            total += md[i];
         }
 
         return total;
@@ -1424,9 +1432,11 @@ public class CommonOps {
         }
 
         final int length = a.getNumElements();
-
+        final double[] ad = a.data;
+        final double[] bd = b.data;
+        
         for( int i = 0; i < length; i++ ) {
-            a.data[i] += b.data[i];
+            ad[i] += bd[i];
         }        
     }
 
@@ -1827,4 +1837,36 @@ public class CommonOps {
 
         return reduced;
     }
+    
+    public static DenseMatrix64F sumColsT( final DenseMatrix64F input , final DenseMatrix64F output ) {
+        return sumColsT(input, output, false);
+    }
+    
+    public static DenseMatrix64F sumColsT( final DenseMatrix64F input ,  DenseMatrix64F output, final boolean transpose ) {
+        
+        if( output == null ) {
+            if (transpose)
+                output = new DenseMatrix64F(input.numCols, 1);
+            else
+                output = new DenseMatrix64F(1, input.numCols);
+            
+        } else if( output.getNumElements() != input.numCols )
+            throw new IllegalArgumentException("Output does not have enough elements to store the results");
+
+        final double[] od = output.getData();
+        final int indexJump = input.numCols*input.numRows;
+        for( int cols = 0; cols < input.numCols; cols++ ) {
+            double total = 0;
+
+            int index = cols;
+            int end = index + indexJump;
+            for( ; index < end; index += input.numCols ) {
+                total += input.data[index];
+            }
+
+            od[cols] = total;
+        }
+        return output;
+    }
+    
 }
