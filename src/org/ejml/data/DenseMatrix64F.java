@@ -125,7 +125,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * </p>
      * @param data 2D array representation of the matrix. Not modified.
      */
-    public DenseMatrix64F( double data[][] ) {
+    public DenseMatrix64F( final double data[][] ) {
         this.numRows = data.length;
         this.numCols = data[0].length;
 
@@ -152,7 +152,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @param numRows The number of rows in the matrix.
      * @param numCols The number of columns in the matrix.
      */
-    public DenseMatrix64F( int numRows  , int numCols ) {
+    public DenseMatrix64F( final int numRows  , final int numCols ) {
         data = new double[ numRows * numCols ];
 
         this.numRows = numRows;
@@ -165,7 +165,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      *
      * @param orig The matrix which is to be copied.  This is not modified or saved.
      */
-    public DenseMatrix64F( DenseMatrix64F orig ) {
+    public DenseMatrix64F( final DenseMatrix64F orig ) {
         this(orig.numRows,orig.numCols);
         System.arraycopy(orig.data, 0, this.data, 0, orig.getNumElements());
     }
@@ -176,7 +176,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      *
      * @param length The size of the matrice's data array.
      */
-    public DenseMatrix64F( int length ) {
+    public DenseMatrix64F( final int length ) {
         data = new double[ length ];
     }
 
@@ -210,8 +210,8 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @param data Data that is being wrapped. Referenced Saved.
      * @return A matrix which references the provided data internally.
      */
-    public static DenseMatrix64F wrap( int numRows , int numCols , double []data ) {
-        DenseMatrix64F s = new DenseMatrix64F();
+    public static DenseMatrix64F wrap( final int numRows , final int numCols , final double []data ) {
+        final DenseMatrix64F s = new DenseMatrix64F();
         s.data = data;
         s.numRows = numRows;
         s.numCols = numCols;
@@ -223,9 +223,9 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @inheritDoc
      */
     @Override
-    public void reshape(int numRows, int numCols, boolean saveValues) {
+    public void reshape(final int numRows, final int numCols, final boolean saveValues) {
         if( data.length < numRows * numCols ) {
-            double []d = new double[ numRows*numCols ];
+            final double []d = new double[ numRows*numCols ];
 
             if( saveValues ) {
                 System.arraycopy(data,0,d,0,getNumElements());
@@ -251,16 +251,17 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @param value The element's new value.
      */
     @Override
-    public void set( int row , int col , double value ) {
-        if( col < 0 || col >= numCols || row < 0 || row >= numRows ) {
+    public void set( final int row , final int col , final double value ) {
+        /*if( col < 0 || col >= numCols || row < 0 || row >= numRows ) {
             throw new IllegalArgumentException("Specified element is out of bounds: ("+row+" , "+col+")");
-        }
+        }*/
 
         data[ row * numCols + col ] = value;
     }
+    
 
     @Override
-    public void unsafe_set( int row , int col , double value ) {
+    public void unsafe_set( final int row , final int col , final double value ) {
         data[ row * numCols + col ] = value;
     }
 
@@ -276,10 +277,10 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @param value The value that is added to the element
      */
     // todo move to commonops
-    public void add( int row , int col , double value ) {
-        if( col < 0 || col >= numCols || row < 0 || row >= numRows ) {
+    public void add( final int row , final int col , final double value ) {
+        /*if( col < 0 || col >= numCols || row < 0 || row >= numRows ) {
             throw new IllegalArgumentException("Specified element is out of bounds");
-        }
+        }*/
 
         data[ row * numCols + col ] += value;
     }
@@ -293,21 +294,21 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @return The value of the element.
      */
     @Override
-    public double get( int row , int col ) {
-        if( col < 0 || col >= numCols || row < 0 || row >= numRows ) {
+    public double get( final int row , final int col ) {
+        /*if( col < 0 || col >= numCols || row < 0 || row >= numRows ) {
             throw new IllegalArgumentException("Specified element is out of bounds: "+row+" "+col);
-        }
+        }*/
 
         return data[ row * numCols + col ];
     }
 
     @Override
-    public double unsafe_get( int row , int col ) {
+    public double unsafe_get( final int row , final int col ) {
         return data[ row * numCols + col ];
     }
 
     @Override
-    public int getIndex( int row , int col ) {
+    public int getIndex( final int row , final int col ) {
         return row * numCols + col;
     }
 
@@ -318,7 +319,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @param col The elements' column.
      * @return True if it is inside the matrices bound, false otherwise.
      */
-    public boolean isInBounds( int row  , int col ) {
+    public boolean isInBounds( final int row  , final int col ) {
         return( col >= 0 && col < numCols && row >= 0 && row < numRows );
     }
 

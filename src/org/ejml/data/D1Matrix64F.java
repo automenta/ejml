@@ -15,22 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ejml.data;
 
 import org.ejml.alg.dense.mult.MatrixDimensionException;
 
-
 /**
- * A generic abstract class for matrices whose data is stored in a single 1D array of doubles.  The
- * format of the elements in this array is not specified.  For example row major, column major,
- * and block row major are all common formats.
+ * A generic abstract class for matrices whose data is stored in a single 1D
+ * array of doubles. The format of the elements in this array is not specified.
+ * For example row major, column major, and block row major are all common
+ * formats.
  *
  * @author Peter Abeles
  */
 public abstract class D1Matrix64F extends ReshapeMatrix64F {
+
     /**
-     * Where the raw data for the matrix is stored.  The format is type dependent.
+     * Where the raw data for the matrix is stored. The format is type
+     * dependent.
      */
     public double[] data;
 
@@ -43,12 +44,12 @@ public abstract class D1Matrix64F extends ReshapeMatrix64F {
         return data;
     }
 
-	/**
-	 * Changes the internal array reference.
-	 */
-	public void setData( double[] data ) {
-		this.data = data;
-	}
+    /**
+     * Changes the internal array reference.
+     */
+    public void setData(final double[] data) {
+        this.data = data;
+    }
 
     /**
      * Returns the internal array index for the specified row and column.
@@ -57,127 +58,131 @@ public abstract class D1Matrix64F extends ReshapeMatrix64F {
      * @param col Column index.
      * @return Internal array index.
      */
-    public abstract int getIndex( int row, int col );
+    public abstract int getIndex(int row, int col);
 
     /**
-     * Sets the value of this matrix to be the same as the value of the provided matrix.  Both
-     * matrices must have the same shape:<br>
+     * Sets the value of this matrix to be the same as the value of the provided
+     * matrix. Both matrices must have the same shape:<br>
      * <br>
      * a<sub>ij</sub> = b<sub>ij</sub><br>
      * <br>
      *
      * @param b The matrix that this matrix is to be set equal to.
      */
-    public void set( D1Matrix64F b )
-    {
-        if( numRows != b.numRows || numCols != b.numCols ) {
+    public void set(final D1Matrix64F b) {
+        if (numRows != b.numRows || numCols != b.numCols) {
             throw new MatrixDimensionException("The two matrices do not have compatible shapes.");
         }
 
-        int dataLength = b.getNumElements();
-
-        System.arraycopy(b.data, 0, this.data, 0, dataLength);
+        System.arraycopy(b.data, 0, this.data, 0, b.getNumElements());
     }
 
     /**
-     * Returns the value of the matrix at the specified internal array index. The element at which row and column
-     * returned by this function depends upon the matrix's internal structure, e.g. row-major, column-major, or block.
+     * Returns the value of the matrix at the specified internal array index.
+     * The element at which row and column returned by this function depends
+     * upon the matrix's internal structure, e.g. row-major, column-major, or
+     * block.
      *
      * @param index Internal array index.
      * @return Value at the specified index.
      */
-    public double get( int index ) {
+    public double get(final int index) {
         return data[index];
     }
 
     /**
-     * Sets the element's value at the specified index.  The element at which row and column
-     * modified by this function depends upon the matrix's internal structure, e.g. row-major, column-major, or block.
+     * Sets the element's value at the specified index. The element at which row
+     * and column modified by this function depends upon the matrix's internal
+     * structure, e.g. row-major, column-major, or block.
      *
      * @param index Index of element that is to be set.
      * @param val The new value of the index.
      */
-    public double set( int index , double val ) {
+    public double set(final int index, final double val) {
         // See benchmarkFunctionReturn.  Pointless return does not degrade performance.  Tested on JDK 1.6.0_21
         return data[index] = val;
     }
 
     /**
      * <p>
-     * Adds the specified value to the internal data array at the specified index.<br>
+     * Adds the specified value to the internal data array at the specified
+     * index.<br>
      * <br>
      * Equivalent to: this.data[index] += val;
      * </p>
      *
      * <p>
-     * Intended for use in highly optimized code.  The  row/column coordinate of the modified element is
-     * dependent upon the matrix's internal structure.
+     * Intended for use in highly optimized code. The row/column coordinate of
+     * the modified element is dependent upon the matrix's internal structure.
      * </p>
      *
      * @param index The index which is being modified.
      * @param val The value that is being added.
      */
-    public double plus( int index , double val ) {
+    public double plus(final int index, final double val) {
         // See benchmarkFunctionReturn.  Pointless return does not degrade performance.  Tested on JDK 1.6.0_21
         return data[index] += val;
     }
 
     /**
      * <p>
-     * Subtracts the specified value to the internal data array at the specified index.<br>
+     * Subtracts the specified value to the internal data array at the specified
+     * index.<br>
      * <br>
      * Equivalent to: this.data[index] -= val;
      * </p>
      *
      * <p>
-     * Intended for use in highly optimized code.  The  row/column coordinate of the modified element is
-     * dependent upon the matrix's internal structure.
+     * Intended for use in highly optimized code. The row/column coordinate of
+     * the modified element is dependent upon the matrix's internal structure.
      * </p>
      *
      * @param index The index which is being modified.
      * @param val The value that is being subtracted.
      */
-    public double minus( int index , double val ) {
+    public double minus(final int index, final double val) {
         // See benchmarkFunctionReturn.  Pointless return does not degrade performance.  Tested on JDK 1.6.0_21
         return data[index] -= val;
     }
 
     /**
      * <p>
-     * Multiplies the specified value to the internal data array at the specified index.<br>
+     * Multiplies the specified value to the internal data array at the
+     * specified index.<br>
      * <br>
      * Equivalent to: this.data[index] *= val;
      * </p>
      *
      * <p>
-     * Intended for use in highly optimized code.  The  row/column coordinate of the modified element is
-     * dependent upon the matrix's internal structure.
+     * Intended for use in highly optimized code. The row/column coordinate of
+     * the modified element is dependent upon the matrix's internal structure.
      * </p>
      *
      * @param index The index which is being modified.
      * @param val The value that is being multiplied.
      */
-    public double times( int index , double val ) {
+    public double times(int index, double val) {
         // See benchmarkFunctionReturn.  Pointless return does not degrade performance.  Tested on JDK 1.6.0_21
         return data[index] *= val;
     }
 
     /**
      * <p>
-     * Divides the specified value to the internal data array at the specified index.<br>
+     * Divides the specified value to the internal data array at the specified
+     * index.<br>
      * <br>
      * Equivalent to: this.data[index] /= val;
      * </p>
      *
      * <p>
-     * Intended for use in highly optimized code.  The  row/column coordinate of the modified element is
-     * dependent upon the matrix's internal structure.
+     * Intended for use in highly optimized code. The row/column coordinate of
+     * the modified element is dependent upon the matrix's internal structure.
      * </p>
      *
      * @param index The index which is being modified.
      * @param val The value that is being divided.
      */
-    public double div( int index , double val ) {
+    public double div(int index, double val) {
         // See benchmarkFunctionReturn.  Pointless return does not degrade performance.  Tested on JDK 1.6.0_21
         return data[index] /= val;
     }

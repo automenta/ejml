@@ -1417,7 +1417,7 @@ public class CommonOps {
      * @param a A Matrix. Modified.
      * @param b A Matrix. Not modified.
      */
-    public static void addEquals( D1Matrix64F a , D1Matrix64F b )
+    public static void addEquals( final D1Matrix64F a , final D1Matrix64F b )
     {
         if( a.numCols != b.numCols || a.numRows != b.numRows ) {
             throw new IllegalArgumentException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -1426,8 +1426,8 @@ public class CommonOps {
         final int length = a.getNumElements();
 
         for( int i = 0; i < length; i++ ) {
-            a.plus(i, b.get(i));
-        }
+            a.data[i] += b.data[i];
+        }        
     }
 
     /**
@@ -1441,7 +1441,7 @@ public class CommonOps {
      * @param a A Matrix. Modified.
      * @param b A Matrix. Not modified.
      */
-    public static void addEquals( D1Matrix64F a , double beta, D1Matrix64F b )
+    public static void addEquals( final D1Matrix64F a , final double beta, final D1Matrix64F b )
     {
         if( a.numCols != b.numCols || a.numRows != b.numRows ) {
             throw new IllegalArgumentException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -1450,8 +1450,8 @@ public class CommonOps {
         final int length = a.getNumElements();
 
         for( int i = 0; i < length; i++ ) {
-            a.plus(i, beta * b.get(i));
-        }
+            a.data[i] += beta * b.data[i];
+        }            
     }
 
     /**
@@ -1479,8 +1479,9 @@ public class CommonOps {
         final int length = a.getNumElements();
 
         for( int i = 0; i < length; i++ ) {
-            c.set( i , a.get(i)+b.get(i) );
-        }
+            c.data[i] = a.data[i] + b.data[i];
+        }            
+        
     }
 
     /**
@@ -1509,8 +1510,8 @@ public class CommonOps {
         final int length = a.getNumElements();
 
         for( int i = 0; i < length; i++ ) {
-            c.set( i , a.get(i)+beta*b.get(i) );
-        }
+            c.data[i] = a.data[i] + beta * b.data[i];
+        }                
     }
 
     /**
@@ -1584,11 +1585,12 @@ public class CommonOps {
      * @param a A matrix.  Modified.
      * @param val The value that's added to each element.
      */
-    public static void add( D1Matrix64F a , double val ) {
+    public static void add( final D1Matrix64F a , final double val ) {
         final int length = a.getNumElements();
 
+        final double[] ad = a.data;
         for( int i = 0; i < length; i++ ) {
-            a.plus( i , val);
+            ad[i] += val;
         }
     }
 
@@ -1625,7 +1627,7 @@ public class CommonOps {
      * @param a A Matrix. Modified.
      * @param b A Matrix. Not modified.
      */
-    public static void subEquals( D1Matrix64F a , D1Matrix64F b )
+    public static void subEquals( final D1Matrix64F a , final D1Matrix64F b )
     {
         if( a.numCols != b.numCols || a.numRows != b.numRows ) {
             throw new IllegalArgumentException("The 'a' and 'b' matrices do not have compatible dimensions");
@@ -1675,14 +1677,16 @@ public class CommonOps {
      * @param a The matrix that is to be scaled.  Modified.
      * @param alpha the amount each element is multiplied by.
      */
-    public static void scale( double alpha , D1Matrix64F a )
+    public static void scale( final double alpha , final D1Matrix64F a )
     {
         // on very small matrices (2 by 2) the call to getNumElements() can slow it down
         // slightly compared to other libraries since it involves an extra multiplication.
         final int size = a.getNumElements();
 
+        final double[] ad = a.data;
+
         for( int i = 0; i < size; i++ ) {
-            a.data[i] *= alpha;
+            ad[i] *= alpha;
         }
     }
 
@@ -1697,7 +1701,7 @@ public class CommonOps {
      * @param a The matrix that is to be scaled.  Not modified.
      * @param b Where the scaled matrix is stored. Modified.
      */
-    public static void scale( double alpha , D1Matrix64F a , D1Matrix64F b)
+    public static void scale( final double alpha , final D1Matrix64F a , final D1Matrix64F b)
     {
         if( a.numRows != b.numRows || a.numCols != b.numCols )
             throw new IllegalArgumentException("Matrices must have the same shape");
@@ -1719,7 +1723,7 @@ public class CommonOps {
      * @param a The matrix whose elements are to be divided.  Modified.
      * @param alpha the amount each element is divided by.
      */
-    public static void divide( double alpha , D1Matrix64F a )
+    public static void divide( final double alpha , final D1Matrix64F a )
     {
         final int size = a.getNumElements();
 
