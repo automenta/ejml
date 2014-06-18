@@ -36,6 +36,7 @@ public class BlockMatrix64F extends D1Matrix64F {
         this.blockLength = blockLength;
         this.numRows = numRows;
         this.numCols = numCols;
+        this.elements = this.numRows * this.numCols;
     }
 
     public BlockMatrix64F( int numRows , int numCols )
@@ -49,6 +50,7 @@ public class BlockMatrix64F extends D1Matrix64F {
         this.blockLength = A.blockLength;
         this.numRows = A.numRows;
         this.numCols = A.numCols;
+        this.elements = this.numRows * this.numCols;
 
         int N = numCols*numRows;
 
@@ -64,6 +66,8 @@ public class BlockMatrix64F extends D1Matrix64F {
         ret.data = data;
         ret.numRows = numRows;
         ret.numCols = numCols;
+        ret.elements = numRows * numCols;
+        
         ret.blockLength = blockLength;
 
         return ret;
@@ -80,6 +84,7 @@ public class BlockMatrix64F extends D1Matrix64F {
         if( numRows*numCols <= data.length  ) {
             this.numRows = numRows;
             this.numCols = numCols;
+            this.elements = numRows * numCols;
         } else {
             double[] data = new double[ numRows*numCols ];
 
@@ -89,6 +94,7 @@ public class BlockMatrix64F extends D1Matrix64F {
 
             this.numRows = numRows;
             this.numCols = numCols;
+            this.elements = numRows * numCols;
             this.data = data;
         }
     }

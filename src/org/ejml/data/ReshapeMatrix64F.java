@@ -35,6 +35,9 @@ public abstract class ReshapeMatrix64F implements Matrix64F {
      * Number of columns in the matrix.
      */
     public int numCols;
+    
+    /** number of elements in the matrix; updated whenever # of rows or cols change */
+    public int elements;
 
 
     /**
@@ -111,6 +114,7 @@ public abstract class ReshapeMatrix64F implements Matrix64F {
      */
     public void setNumRows(int numRows) {
         this.numRows = numRows;
+        this.elements = numRows*numCols;
     }
 
     /**
@@ -120,6 +124,7 @@ public abstract class ReshapeMatrix64F implements Matrix64F {
      */
     public void setNumCols(int numCols) {
         this.numCols = numCols;
+        this.elements = numRows*numCols;        
     }
 
     /**

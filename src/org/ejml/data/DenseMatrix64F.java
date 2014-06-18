@@ -106,12 +106,14 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      * @param rowMajor If the array is encoded in a row-major or a column-major format.
      * @param data The formatted 1D array. Not modified.
      */
+    
     public DenseMatrix64F(int numRows, int numCols, boolean rowMajor, double... data) {
         final int length = numRows * numCols;
         this.data = new double[ length ];
 
         this.numRows = numRows;
         this.numCols = numCols;
+        this.elements = numRows*numCols;
 
         set(numRows,numCols, rowMajor, data);
     }
@@ -157,6 +159,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
 
         this.numRows = numRows;
         this.numCols = numCols;
+        this.elements = numRows*numCols;
     }
 
     /**
@@ -215,6 +218,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
         s.data = data;
         s.numRows = numRows;
         s.numCols = numCols;
+        s.elements = numRows*numCols;
 
         return s;
     }
@@ -236,6 +240,7 @@ public class DenseMatrix64F extends RowD1Matrix64F {
 
         this.numRows = numRows;
         this.numCols = numCols;
+        this.elements = numRows*numCols;
     }
 
     /**
@@ -331,7 +336,9 @@ public class DenseMatrix64F extends RowD1Matrix64F {
      */
     @Override
     public int getNumElements() {
-        return numRows*numCols;
+        //return numRows*numCols;
+        elements = numRows * numCols;
+        return elements;
     }
 
 
@@ -360,7 +367,8 @@ public class DenseMatrix64F extends RowD1Matrix64F {
 
         this.numRows = b.numRows;
         this.numCols = b.numCols;
-
+        this.elements = numRows*numCols;
+        
         System.arraycopy(b.data, 0, this.data, 0, dataLength);
     }
 
